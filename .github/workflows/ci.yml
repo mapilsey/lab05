@@ -25,7 +25,8 @@ jobs:
           lcov --remove coverage.info \
             '*/tests/*' \
             '*/_deps/*' \
-            --output-file coverage.info
+            --output-file coverage.info\
+            --ignore-errors unused
           ls -la coverage.info
 
 

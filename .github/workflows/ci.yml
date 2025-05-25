@@ -1,0 +1,22 @@
+name: CI
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake lcov libgtest-dev
+      - name: Build and test
+        run: |
+          mkdir -p build
+          cd build
+          cmake -DENABLE_COVERAGE=ON ..
+          cmake --build .
+          ctest --output-on-failure
+      - name: Upload coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          path-to-lcov: build/coverage.info

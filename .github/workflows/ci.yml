@@ -23,10 +23,11 @@ jobs:
           # Генерация coverage.info
           lcov --capture --directory . --output-file coverage.info
           lcov --remove coverage.info \
-            '/usr/*' \
             '*/tests/*' \
             '*/_deps/*' \
             --output-file coverage.info
+          ls -la coverage.info
+
 
 
       - name: Upload coverage to Coveralls

@@ -1,0 +1,23 @@
+language: cpp
+compiler: gcc
+
+addons:
+  apt:
+    packages:
+      - cmake
+      - lcov
+      - libgtest-dev
+
+before_script:
+  - mkdir -p build
+  - cd build
+  - cmake -DENABLE_COVERAGE=ON ..
+
+script:
+  - cmake --build .
+  - ctest --output-on-failure
+
+after_success:
+  - lcov --capture --directory . --output-file coverage.info --ignore-errors inconsistent
+  - lcov --remove coverage.info '/usr/*' '*/tests/*' '*/_deps/*' --output-file coverage.info
+  - coveralls-lcov coverage.info

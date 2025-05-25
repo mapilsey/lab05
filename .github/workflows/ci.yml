@@ -5,10 +5,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y cmake lcov libgtest-dev
+          curl -L https://coveralls.io/coveralls-linux.tar.gz | tar -xz -C /usr/local/bin
+
       - name: Build and test
         run: |
           mkdir -p build
@@ -16,7 +19,17 @@ jobs:
           cmake -DENABLE_COVERAGE=ON ..
           cmake --build .
           ctest --output-on-failure
+
+          # Генерация coverage.info
+          lcov --capture --directory . --output-file coverage.info
+          lcov --remove coverage.info \
+            '/usr/*' \
+            '*/tests/*' \
+            '*/_deps/*' \
+            --output-file coverage.info
+
+
       - name: Upload coverage to Coveralls
         uses: coverallsapp/github-action@v2
         with:
-          path-to-lcov: coverage.info
+          path-to-lcov: build/coverage.info

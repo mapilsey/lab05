@@ -1,5 +1,0 @@
-if(EXISTS "/home/mapilsey/projects/lab05/build/tests/banking_tests[1]_tests.cmake")
-  include("/home/mapilsey/projects/lab05/build/tests/banking_tests[1]_tests.cmake")
-else()
-  add_test(banking_tests_NOT_BUILT banking_tests_NOT_BUILT)
-endif()
